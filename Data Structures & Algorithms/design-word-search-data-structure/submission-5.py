@@ -1,0 +1,34 @@
+class TrieNode:
+    def __init__(self) -> None:
+        self.children = {}
+        self.end = False
+
+
+class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def addWord(self, word: str) -> None:
+        curr = self.root
+        for c in word:
+            if c not in curr.children:
+                curr.children[c] = TrieNode()
+            curr = curr.children[c]
+        curr.end = True
+
+    def search(self, word: str) -> bool:
+        def dfs(ix, root):
+            curr = root
+            for i in range(ix, len(word)):
+                if (c := word[i]) == ".":
+                    for child in curr.children.values():
+                        # iterating over the indices between the incremented counter and the word's end
+                        if dfs(i + 1, child):
+                            return True
+                    return False
+                if c not in curr.children:
+                    return False
+                curr = curr.children[c]
+            return curr.end
+
+        return dfs(0, self.root)
