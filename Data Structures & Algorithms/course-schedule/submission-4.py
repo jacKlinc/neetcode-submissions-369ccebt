@@ -1,0 +1,30 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        reqs = {i: [] for i in range(numCourses)}
+        for crs, pre in prerequisites:
+            reqs[crs].append(pre)
+
+        visited = set()
+
+        def dfs(node):
+            if node in visited:
+                return False
+            if reqs[node] == []:
+                return True
+
+            visited.add(node)
+            for neighbour in reqs[node]:
+                # skip first iteration
+
+                if not dfs(neighbour):
+                    return False
+
+            visited.remove(node)
+            reqs[node] = []
+            return True
+
+        for c in range(numCourses):
+            if not dfs(c):
+                return False
+
+        return True
