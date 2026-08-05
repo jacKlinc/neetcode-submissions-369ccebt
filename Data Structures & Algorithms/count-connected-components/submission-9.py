@@ -1,0 +1,22 @@
+class Solution:
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        adj_l={i:[] for i in range(n)}
+        for n1, n2 in edges:
+            adj_l[n1].append(n2)
+            adj_l[n2].append(n1)
+
+        visited=set()
+        def dfs(n):
+            for neighbour in adj_l[n]:
+                if neighbour not in visited:
+                    visited.add(neighbour)
+                    dfs(neighbour)
+
+        res=0
+        for i in range(n):
+            if i not in visited:
+                visited.add(i)
+                dfs(i)
+                res +=1
+
+        return res
